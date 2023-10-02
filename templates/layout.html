@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bootswatch.com/5/litera/bootstrap.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <title>Reunion General - Asistencia</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Reunion General - Asistencia</a>
+            <form class="d-flex">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total:
+                        <span class="badge bg-primary rounded-pill"> {{totalUsuarios}} </span>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    <script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
