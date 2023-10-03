@@ -91,6 +91,14 @@ def delete_contact(id):
     flash('Usuario Eliminado exitosamente!')
     return redirect(url_for('index'))
 
+@app.route('/vaciarLista')
+def vaciar_lista():
+    cur = mysql.connection.cursor()
+    sql = """DELETE FROM reunion_general.hermanos;"""
+    cur.execute(sql)
+    mysql.connection.commit() # Save changes
+    flash('Lista limpia.')
+    return redirect(url_for('index'))
 
 @app.route('/exportar')
 def exportar_a_excel():
