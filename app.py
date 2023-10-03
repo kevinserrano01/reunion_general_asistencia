@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
 import openpyxl
 from openpyxl import load_workbook, Workbook # read excel
+from configExcel import Config
 
 
 app = Flask(__name__)
@@ -80,7 +81,10 @@ def update_contact(id):
 @app.route('/delete/<string:id>')
 def delete_contact(id):
     cur = mysql.connection.cursor()
-    sql = "DELETE FROM usuarios WHERE usuario_id = %s"
+    sql = """
+            DELETE FROM reunion_general.hermanos
+            WHERE hermano_id = %s
+        """
     params = id,
     cur.execute(sql, params)
     mysql.connection.commit() # Save changes
@@ -91,27 +95,29 @@ def delete_contact(id):
 @app.route('/exportar')
 def exportar_a_excel():
     cur = mysql.connection.cursor()
-    sql = """SELECT usuarios.nombre, usuarios.apellido, usuarios.edad, DATE_FORMAT(usuarios.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(usuarios.hora, '%H:%i:%s') as hora, iglesias.nombre as iglesia
-            FROM iglesias
-            INNER JOIN usuarios ON iglesias.iglesia_id = usuarios.iglesia"""
+    sql = """SELECT * FROM reunion_general.hermanos"""
     cur.execute(sql)
     data = cur.fetchall()
 
-    for joven in data:
-        # Abre el archivo Excel existente o crea uno nuevo si no existe
-        try:
-            libro_excel = load_workbook("Asistencia-02-10-2023.xlsx")
-            hoja = libro_excel.active
-        except FileNotFoundError:
-            libro_excel = Workbook()
-            hoja = libro_excel.active
-            hoja.append([["Nombre", "Apellido", "Hora"]])
+    # Abre el archivo Excel existente o crea uno nuevo si no existe
+    file_name = Config.NOMBRE_ARCHIVO
+    hojaExcel = Config.HOJA
 
-        # Añadir los nuevos datos debajo de los existentes
-        hoja.append([joven[0], joven[1], joven[2], joven[3], joven[4], joven[5]])
+    libro_excel = load_workbook(file_name[0])
+    hoja = libro_excel.create_sheet(hojaExcel)
 
-        # Guardar el libro de Excel
-        libro_excel.save("Asistencia-02-10-2023.xlsx")
+    # ENCABEZADOS
+    hoja['A1'] = "Nombre"
+    hoja['B1'] = "Apellido"
+    hoja['C1'] = "Ingreso"
+    hoja['D1'] = "Observacion"
+
+    # Añadir los nuevos datos debajo de los existentes
+    for hermano in data:
+        hoja.append([hermano[1], hermano[2], hermano[3], hermano[4]])
+
+    # Guardar el libro de Excel
+    libro_excel.save(file_name[0])
 
     flash('Usuarios exportados exitosamente!')
     return redirect(url_for('index'))
