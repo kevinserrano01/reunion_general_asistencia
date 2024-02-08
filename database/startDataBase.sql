@@ -11,7 +11,7 @@ CREATE TABLE hermanos(
 
 
 INSERT INTO hermanos(nombre, apellido, observacion)
-VALUES ('Ana', 'Chirinos', ''),
-	('Kevin', 'Serrano', 'Nuevo'),
-    ('Luna', 'Pedraza', 'Viejo'),
-    ('Enzo', 'Pedraza', '');
+VALUES ('User1', 'Apellido1', ''),
+	('User2', 'Apellido2', 'Visita'),
+    ('User3', 'Apellido3', ''),
+    ('User4', 'Apellido4', 'Visita');

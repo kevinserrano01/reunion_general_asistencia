@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
-import openpyxl
 from openpyxl import load_workbook, Workbook # read excel
 from configExcel import Config
 
@@ -8,10 +7,12 @@ from configExcel import Config
 app = Flask(__name__)
 
 # Mysql connection
+# Usar variables de entorno (.env)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '123987'
 app.config['MYSQL_DB'] = 'reunion_general'
+
 mysql = MySQL(app)
 
 # settings
